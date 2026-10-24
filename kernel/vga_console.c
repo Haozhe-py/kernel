@@ -1,7 +1,5 @@
 #include "vga_console.h"
 #include "asm.h"
-#include <string.h>
-#include <math.h>
 
 curpos_t vga_pos = 0;
 volatile char *vga_addr = (volatile char*)0xB8000;
@@ -9,14 +7,12 @@ volatile char *vga_addr = (volatile char*)0xB8000;
 static void update_cursor(curpos_t pos) {
     curpos_t vp = pos;
 
-    // 先使能光标（保留原有高位，只改低 5 位扫描线）
     outb(0x3D4, 0x0A);
-    outb(0x3D5, (inb(0x3D5) & 0xC0) | 0x0E);  // 起始扫描线 14
+    outb(0x3D5, (inb(0x3D5) & 0xC0) | 0x0E);
 
     outb(0x3D4, 0x0B);
-    outb(0x3D5, (inb(0x3D5) & 0xE0) | 0x0F);  // 结束扫描线 15
+    outb(0x3D5, (inb(0x3D5) & 0xE0) | 0x0F);
 
-    // 再设位置
     outb(0x3D4, 0x0F);
     outb(0x3D5, (unsigned char)(vp & 0xFF));
     outb(0x3D4, 0x0E);
@@ -81,4 +77,23 @@ void vga_clear(void)
     }
     _vga_putchar('\0');
     update_cursor(vga_pos);
+} 
+
+void vga_print_hex(uint64_t hex)
+{
+    char string[16+2+1];
+    string[0] = '0'; string[1] = 'x';
+    string[16+2] = '\0';
+    const char* hexstr = "0123456789ABCDEF";
+    for(int i=0; i<16; ++i)
+        string[i+2] = hexstr[(hex>>4*(15-i))&0xF];
+    vga_print(string);
+}
+
+void vga_print_int(uint64_t num)
+{
+}
+
+void vga_print_double(double num)
+{
 }

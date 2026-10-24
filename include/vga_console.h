@@ -10,3 +10,8 @@ void vga_putchar(char);
 void vga_roll(void);
 void vga_print(const char*);
 void vga_clear(void);
+
+
+void vga_print_hex(uint64_t);
+void vga_print_int(uint64_t);
+void vga_print_double(double);

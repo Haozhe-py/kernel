@@ -39,6 +39,10 @@ mb2_header_end:
 _start:
     cli
 
+    /* Save Multiboot magic (EAX) and info pointer (EBX) */
+    mov %eax, mb_magic32
+    mov %ebx, mb_info32
+
     /* Debug: Very early output to 0xB8000 to confirm we boot */
     mov $0x07, %ah
     mov $msg, %ebx
@@ -52,10 +56,6 @@ _start:
         sub $1, %ecx
         cmp $0, %ecx
         jg lp
-
-    /* Save Multiboot magic (EAX) and info pointer (EBX) */
-    mov %eax, mb_magic32
-    mov %ebx, mb_info32
 
     /* Load a minimal GDT with 64-bit code and data descriptors */
     lgdt gdt_descriptor
