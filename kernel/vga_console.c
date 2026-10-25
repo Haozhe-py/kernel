@@ -81,19 +81,26 @@ void vga_clear(void)
 
 void vga_print_hex(uint64_t hex)
 {
-    char string[16+2+1];
+    char string[19];   // 0x (2 chars) + hex (16 chars) + '\0' (1 char)
     string[0] = '0'; string[1] = 'x';
-    string[16+2] = '\0';
+    string[18] = '\0';
     const char* hexstr = "0123456789ABCDEF";
     for(int i=0; i<16; ++i)
-        string[i+2] = hexstr[(hex>>4*(15-i))&0xF];
+        string[i+2] = hexstr[(hex>>(4*(15-i)))&0xF];
     vga_print(string);
 }
 
 void vga_print_int(uint64_t num)
 {
+    char buf[21];
+    char *p = &buf[20]; *p = '\0';
+    do {
+        *(--p) = '0' + num%10;
+        num /= 10;
+    } while (num);
+    vga_print(p);
 }
 
-void vga_print_double(double num)
+void vga_print_double(double)
 {
 }

@@ -14,7 +14,10 @@ void kernel_main(void)
     vga_clear();
     vga_print("Booting...\n");
 
-    pmm_init((uint64_t)mb_magic32, (uint64_t)mb_info32);
+    mm_init((uint64_t)mb_magic32, (uint64_t)mb_info32);
+
+    vga_print_int(pmm_free_count());
+    vga_print(" pages available.\n");
 
     char *page1 = pmm_alloc_frame();
     char *page2 = pmm_alloc_frame();
@@ -22,10 +25,14 @@ void kernel_main(void)
     if(page1==page2)  vga_print("Error while calling pmm_alloc_frame()");
     else
     {
+        vga_print_int(pmm_free_count());
+        vga_print(" pages available.\n");
+
         vga_print_hex((uint64_t)page1);
-        vga_print(" ");
+        vga_print(" (Page 1)\n");
         vga_print_hex((uint64_t)page2);
-        vga_print("\n");
+        vga_print(" (Page 2)\n");
+        
         page1[0] = '2';
         page1[1] = '3';
         page1[2] = '\0';
@@ -35,8 +42,13 @@ void kernel_main(void)
 
         vga_print(page1);
         vga_print(page2);
+
         pmm_free_frame(page1);
         vga_print(page1);  // should not show any message
+
+        vga_print("\n");
+        vga_print_int(pmm_free_count());
+        vga_print(" pages available.\n");
     }
 }
 

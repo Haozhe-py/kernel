@@ -57,7 +57,7 @@ $(ISO): $(KERNEL) grub.cfg
 	grub-mkrescue -o $(ISO) $(ISO_DIR)
 
 run: $(ISO)
-	$(QEMU) -cdrom $(ISO) -serial stdio -m 512M -no-reboot $(QEMU_FLAGS)
+	$(QEMU) -cdrom $(ISO) -serial stdio -m 1024M -no-reboot $(QEMU_FLAGS)
 
 run-kernel: $(KERNEL)
 	$(QEMU) -kernel $(KERNEL) -serial stdio -m 512M -no-reboot $(QEMU_FLAGS)
