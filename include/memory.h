@@ -3,6 +3,9 @@
 
 typedef uint64_t pte_t;
 
+#define PMM_PAGE_SIZE    4096ULL
+#define PMM_MANAGED_SIZE (1ULL << 30)
+
 void mm_init(uint64_t mb_magic, uint64_t mb_info);
 
 
@@ -13,6 +16,7 @@ void pmm_free_frame(void*);
 void *pmm_alloc_frames(size_t);
 void pmm_free_frames(void*, size_t);
 size_t pmm_free_count(void);
+uint64_t pmm_managed_base(void);
 
 
 /*---------- VMM ----------*/

@@ -19,36 +19,15 @@ void kernel_main(void)
     vga_print_int(pmm_free_count());
     vga_print(" pages available.\n");
 
-    char *page1 = pmm_alloc_frame();
-    char *page2 = pmm_alloc_frame();
-
-    if(page1==page2)  vga_print("Error while calling pmm_alloc_frame()");
-    else
+    /* WARNING: 262144 PAGES IN TOTAL, ENSURE YOUR PC HAVE ENOUGH MEMORY */
+    for(uint64_t i=0; i<(PMM_MANAGED_SIZE / PMM_PAGE_SIZE); ++i)
     {
-        vga_print_int(pmm_free_count());
-        vga_print(" pages available.\n");
-
-        vga_print_hex((uint64_t)page1);
-        vga_print(" (Page 1)\n");
-        vga_print_hex((uint64_t)page2);
-        vga_print(" (Page 2)\n");
-        
-        page1[0] = '2';
-        page1[1] = '3';
-        page1[2] = '\0';
-
-        page2[0] = '4';
-        page2[1] = '\0';
-
-        vga_print(page1);
-        vga_print(page2);
-
-        pmm_free_frame(page1);
-        vga_print(page1);  // should not show any message
-
-        vga_print("\n");
-        vga_print_int(pmm_free_count());
-        vga_print(" pages available.\n");
+        vga_print("alloc page "); vga_print_int(i); vga_print("\n");
+        char *page = pmm_alloc_frame();
+        page[0] = '\0';
     }
+    vga_print_int(pmm_free_count());
+    vga_print(" pages available.\n");
+    vga_print("ok.");
 }
 
