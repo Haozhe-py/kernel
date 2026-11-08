@@ -43,11 +43,6 @@ _start:
     mov %eax, mb_magic32
     mov %ebx, mb_info32
 
-    /* Debug: Very early output to 0xB8000 to confirm we boot */
-    mov $0x07, %ah
-    mov $msg, %ebx
-    mov $0xB8000, %edx
-    mov $20, %ecx
     lp:
         mov (%ebx), %al
         mov %ax, (%edx)
@@ -144,10 +139,6 @@ gdt_end:
 
 
 .section .data
-
-msg:
-    .asciz "hello, Microkernel!!"
-
 /* ----------------------- Page tables ------------------------- */
 .align 4096
 .globl pml4

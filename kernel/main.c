@@ -9,8 +9,6 @@ extern unsigned int mb_info32;
 /*---------- Entry ----------*/
 void kernel_main(void)
 {
-    *(volatile char*)0xB8000 = 'H'; /* Debug: Ensure function `kernel_main` is called */
-
     vga_clear();
     vga_print("Booting...\n");
 
