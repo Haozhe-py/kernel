@@ -33,16 +33,33 @@ uint64_t virt_to_phys(void*);
 // tlb
 void vmm_flush_tlb(uint64_t);
 
-// walk
-// ...
+// walk & operations
+pte_t *vmm_walk(uint64_t *pml4, uint64_t vaddr);
+uint64_t *vmm_ensure_table(pte_t *entry, uint64_t flags);
+int vmm_map(uint64_t *pml4, uint64_t vaddr, uint64_t phys, uint64_t flags);
+int vmm_unmap(uint64_t *pml4, uint64_t vaddr);
+uint64_t vmm_get_phys(uint64_t *pml4, uint64_t vaddr);
+int vmm_protect(uint64_t *pml4, uint64_t vaddr, uint64_t flags);
+
 
 
 /*---------- KHeap ----------*/
 void kheap_init();
 
+void *kmalloc(size_t size);
+void *kzalloc(size_t size);
+void kfree(void *ptr);
+
+
 
 /*---------- ASpace ----------*/
 void aspace_init();
+struct aspace *aspace_create(void);
+void aspace_destroy(struct aspace *as);
+void aspace_switch(struct aspace *as);
+struct aspace *aspace_current(void);
+int aspace_map(struct aspace *as, uint64_t vaddr, uint64_t phys, uint64_t flags);
+int aspace_unmap(struct aspace *as, uint64_t vaddr);
 
 
 /*---------- Mapping ----------*/
